@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olek Drive — The Ride That Shows Up | Nigeria's Own Ride-Hailing App</title>
+<meta name="description" content="Olek Drive is Nigeria's ride-hailing app: safe, honest, cash or card, owned by the continent. Launching Lagos 2027. Fair commissions for drivers. 24/7 human safety desk for riders.">
+<script src="olek-config.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' rx='20' fill='%230B4F3A'/><path d='M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34' fill='none' stroke='%23E9A13B' stroke-width='9' stroke-linecap='round'/><circle cx='18' cy='74' r='6' fill='%23F7F8F6'/><circle cx='81' cy='34' r='8.5' fill='%23F7F8F6'/><circle cx='81' cy='34' r='3.2' fill='%230B4F3A'/></svg>">
+<style>
+:root{
+  --green:#0B4F3A; --green2:#157A54; --green3:#0E3D2E; --amber:#E9A13B; --amber2:#D98A1F;
+  --midnight:#1E2A26; --mist:#F7F8F6; --sage:#EAF3EE; --gray:#6B7280; --line:#DDE5E0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--mist);color:var(--midnight);line-height:1.55;overflow-x:hidden}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;font-weight:800;color:var(--green2);text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-weight:700;border:none;border-radius:999px;padding:.85rem 1.7rem;font-size:.95rem;cursor:pointer;text-decoration:none;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-amber{background:var(--amber);color:var(--midnight);box-shadow:0 6px 18px rgba(233,161,59,.4)}
+.btn-amber:hover{background:#f2b25a}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green2)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55)}
+.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.btn-ghost-dark{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn-ghost-dark:hover{background:var(--sage)}
+
+/* ============ NAV ============ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,79,58,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-inner{max-width:1180px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-word{font-family:"Arial Black","DejaVu Sans",sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:.04em;color:#fff}
+.nav-word span{color:var(--amber)}
+.nav-links{display:flex;gap:1.6rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.86rem;font-weight:600;transition:color .15s}
+.nav-links a:hover{color:var(--amber)}
+.nav-cta{background:var(--amber);color:var(--midnight);padding:.5rem 1.2rem;border-radius:999px;font-size:.82rem;font-weight:800;text-decoration:none;white-space:nowrap}
+.burger{display:none;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
+.mobile-menu{display:none;background:var(--green3);padding:1rem 24px 1.5rem}
+.mobile-menu a{display:block;color:#fff;text-decoration:none;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600}
+
+/* ============ HERO ============ */
+header.hero{background:radial-gradient(1200px 600px at 80% -10%, #157A54 0%, var(--green) 45%, var(--green3) 100%);color:#fff;padding:110px 0 70px;position:relative;overflow:hidden}
+header.hero::before{content:"";position:absolute;inset:0;opacity:.10;background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);background-size:34px 34px;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.6rem,5.4vw,4rem);line-height:1.04;font-weight:700;margin:1rem 0 1.2rem;color:#fff}
+.hero h1 em{font-style:italic;color:var(--amber)}
+.hero-sub{font-size:1.06rem;color:rgba(255,255,255,.82);max-width:34rem;margin-bottom:1.6rem}
+.hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.trust-chips{display:flex;gap:.5rem;flex-wrap:wrap}
+.chip{font-size:.72rem;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.3rem .75rem;display:inline-flex;align-items:center;gap:.35rem;background:rgba(255,255,255,.06)}
+.chip svg{flex:0 0 auto}
+
+/* phone mockup */
+.phone-wrap{display:flex;justify-content:center}
+.phone{width:290px;height:570px;background:#101d17;border-radius:44px;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.08);position:relative}
+.phone-notch{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:90px;height:18px;background:#101d17;border-radius:12px;z-index:5}
+.screen{background:#0f2a20;border-radius:34px;overflow:hidden;height:100%;position:relative;display:flex;flex-direction:column}
+.map-area{flex:1;position:relative;background:#0e3325}
+.bottom-sheet{background:#f7f8f6;border-radius:22px 22px 0 0;padding:.85rem 1rem 1rem;margin-top:-18px;position:relative;z-index:2}
+  .bs-row{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.bs-fare{font-family:Georgia,serif;font-size:1.35rem;font-weight:700;color:var(--green)}
+.bs-sub{font-size:.68rem;color:var(--gray)}
+.bs-cta{margin-top:.6rem;background:var(--green);color:#fff;text-align:center;border-radius:12px;padding:.5rem;font-weight:700;font-size:.82rem}
+.driver-chip{display:flex;align-items:center;gap:.45rem;margin-top:.55rem;padding-top:.55rem;border-top:1px solid var(--line)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--green);font-size:.8rem}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.15;transform:scale(2.1)}}
+.pulse{animation:pulse 2.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes dashmove{to{stroke-dashoffset:-140}}
+.route-line{stroke-dasharray:10 8;animation:dashmove 2.6s linear infinite}
+
+/* ============ SECTIONS ============ */
+section{padding:80px 0}
+.sec-head{text-align:center;max-width:44rem;margin:0 auto 2.6rem}
+.sec-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);color:var(--green);margin:.6rem 0 .6rem;line-height:1.15}
+.sec-head p{color:var(--gray)}
+
+/* stats strip */
+.stats{background:var(--green3);color:#fff;padding:38px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
+.stat-n{font-family:Georgia,serif;font-size:1.9rem;font-weight:700;color:var(--amber)}
+.stat-l{font-size:.72rem;color:rgba(255,255,255,.75);margin-top:.15rem;letter-spacing:.02em}
+
+/* fare estimator */
+.estimator{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.6rem 1.8rem;box-shadow:0 12px 34px rgba(11,79,58,.08);margin-top:1.6rem}
+.est-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.4rem;align-items:end}
+.est-grid label{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gray);display:block;margin-bottom:.35rem}
+select,input[type=range]{width:100%}
+select{padding:.6rem .7rem;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;background:var(--mist)}
+input[type=range]{accent-color:var(--green)}
+.est-out{text-align:center;background:var(--sage);border-radius:16px;padding:.9rem}
+.est-fare{font-family:Georgia,serif;font-size:2.1rem;font-weight:700;color:var(--green)}
+.est-note{font-size:.68rem;color:var(--gray)}
+.est-val{font-size:.8rem;color:var(--green2);font-weight:700}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.svc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:1.3rem 1.2rem;transition:transform .2s, box-shadow .2s;position:relative}
+.svc:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(11,79,58,.14)}
+.svc-ic{width:46px;height:46px;border-radius:12px;background:var(--sage);display:flex;align-items:center;justify-content:center;margin-bottom:.7rem}
+.svc h3{font-size:1.02rem;color:var(--green);margin-bottom:.25rem}
+.svc p{font-size:.8rem;color:var(--gray)}
+.svc-tag{position:absolute;top:.7rem;right:.7rem;font-size:.6rem;font-weight:800;letter-spacing:.08em;background:var(--amber);border-radius:6px;padding:.15rem .4rem;color:var(--midnight)}
+
+/* safety */
+.safety{background:linear-gradient(160deg,var(--green) 0%,var(--green3) 100%);color:#fff;position:relative}
+.safety .sec-head h2{color:#fff}
+.safety .sec-head p{color:rgba(255,255,255,.75)}
+.safe-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.safe-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:1.4rem 1.2rem}
+.safe-card h3{color:var(--amber);font-size:1rem;margin:.6rem 0 .35rem}
+.safe-card p{font-size:.8rem;color:rgba(255,255,255,.8)}
+
+/* drivers */
+.earn-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:2.5rem;align-items:center}
+.earn-card{background:var(--green);color:#fff;border-radius:22px;padding:1.8rem}
+.earn-big{font-family:Georgia,serif;font-size:2.4rem;font-weight:700;color:var(--amber)}
+.earn-label{font-size:.75rem;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.08em}
+.earn-rows{margin:.9rem 0;font-size:.9rem}
+.earn-rows .er{display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px dashed rgba(255,255,255,.2)}
+.driver-points{list-style:none;margin:1.2rem 0 0}
+.driver-points li{display:flex;gap:.6rem;margin-bottom:.65rem;font-size:.92rem}
+.driver-points b{color:var(--green)}
+
+/* forms */
+.forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+.form-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.6rem;box-shadow:0 10px 28px rgba(11,79,58,.07)}
+.form-card h3{color:var(--green);margin-bottom:.15rem}
+.form-card>p{font-size:.84rem;color:var(--gray);margin-bottom:.9rem}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+label.f{font-size:.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;display:block;margin:.55rem 0 .25rem}
+input[type=text],input[type=tel],input[type=email]{width:100%;padding:.62rem .7rem;border:1.5px solid var(--line);border-radius:10px;font-size:.92rem;background:var(--mist)}
+input:focus,select:focus{outline:2px solid var(--green2);border-color:transparent}
+.form-note{font-size:.68rem;color:var(--gray);margin-top:.6rem}
+  .success{display:none;background:var(--sage);border:1.5px solid var(--green2);color:var(--green);border-radius:14px;padding:1rem;text-align:center;font-weight:600;margin-top:.8rem}
+
+/* FAQ */
+.faq-wrap{max-width:52rem;margin:0 auto}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:.7rem;overflow:hidden}
+summary{cursor:pointer;padding:1rem 1.2rem;font-weight:700;color:var(--green);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+summary::after{content:"+";font-size:1.4rem;color:var(--amber2);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details .faq-body{padding:0 1.2rem 1rem;color:#374151;font-size:.9rem;border-top:1px solid var(--line);padding-top:.7rem}
+
+/* corporate strip */
+.corp{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.corp h3{color:var(--green);font-size:1.25rem}
+.corp p{color:var(--gray);font-size:.88rem;max-width:40rem}
+
+/* footer */
+footer{background:var(--midnight);color:rgba(255,255,255,.75);padding:60px 0 26px;font-size:.85rem}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+.foot-grid h4{color:#fff;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem}
+.foot-grid a{color:rgba(255,255,255,.7);text-decoration:none;display:block;padding:.14rem 0}
+.foot-grid a:hover{color:var(--amber)}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:1.2rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.72rem;color:rgba(255,255,255,.45)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--green);color:#fff;padding:.8rem 1.4rem;border-radius:12px;font-size:.88rem;opacity:0;pointer-events:none;transition:all .3s;z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1024px){.svc-grid,.safe-grid{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr);gap:1.4rem}}
+@media (max-width:900px){
+  .hero-grid,.earn-wrap,.forms-grid,.est-grid{grid-template-columns:1fr}
+  .nav-links{display:none}.burger{display:block}.foot-grid{grid-template-columns:repeat(2,1fr)}
+  .hero{padding-top:90px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top" aria-label="Olek Drive home">
+      <svg width="34" height="34" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" rx="20" fill="#E9A13B"/><path d="M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34" fill="none" stroke="#0B4F3A" stroke-width="9" stroke-linecap="round"/><circle cx="18" cy="74" r="6" fill="#0B4F3A"/><circle cx="81" cy="34" r="8" fill="#0B4F3A"/></svg>
+      <span class="nav-word">OLEK <span>DRIVE</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#safety">Safety</a></li>
+      <li><a href="#drivers">Drive with us</a></li>
+      <li><a href="#corporate">Corporate</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="nav-cta" href="#waitlist">Join the waitlist</a>
+    <button class="burger" aria-label="Toggle menu" onclick="document.getElementById('mmenu').style.display = document.getElementById('mmenu').style.display==='block'?'none':'block'">☰</button>
+  </div>
+  <div class="mobile-menu" id="mmenu">
+    <a href="#services">Services</a><a href="#safety">Safety</a><a href="#drivers">Drive with us</a><a href="#corporate">Corporate</a><a href="#faq">FAQ</a><a href="#waitlist">Join the waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow" style="color:var(--amber)">Launching Lagos · 2027</span>
+      <h1>The ride that<br><em>shows up.</em></h1>
+      <p class="hero-sub">Olek Drive is Nigeria's own ride-hailing app — honest fares, verified drivers, cash or card, and a safety desk staffed by humans. Built in Lagos. Owned in Africa. Ready when you are.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-amber" href="#waitlist">Get early access
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#drivers">Drive with Olek</a>
+      </div>
+      <div class="trust-chips">
+        <span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Capped 15–18% commission</span>
+        <span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>Cash + card accepted</span>
+        <span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>24/7 human safety desk</span>
+        <span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>No surge games</span>
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+        <div class="phone-wrap" aria-hidden="true">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="screen">
+          <div class="map-area">
+            <svg width="100%" height="100%" viewBox="0 0 266 330" preserveAspectRatio="xMidYMid slice">
+              <rect width="266" height="330" fill="#0e3325"/>
+              <g stroke="#1d4a36" stroke-width="9">
+                <path d="M-10 80 L276 60"/><path d="M-10 150 L276 140"/><path d="M-10 225 L276 220"/>
+                <path d="M60 -10 L75 340"/><path d="M140 -10 L130 340"/><path d="M215 -10 L225 340"/>
+              </g>
+              <g stroke="#2a5a44" stroke-width="3">
+                <path d="M-10 112 L276 100"/><path d="M-10 190 L276 182"/><path d="M100 -10 L102 340"/><path d="M180 -10 L176 340"/>
+              </g>
+              <path class="route-line" d="M52 268 C60 190 120 190 142 150 C162 114 200 108 214 62" fill="none" stroke="#E9A13B" stroke-width="5" stroke-linecap="round"/>
+              <circle class="pulse" cx="52" cy="268" r="12" fill="#F7F8F6" opacity="0.5"/>
+              <circle cx="52" cy="268" r="6" fill="#F7F8F6"/>
+              <circle cx="214" cy="62" r="9" fill="#F7F8F6"/><circle cx="214" cy="62" r="3.4" fill="#0e3325"/>
+              <g transform="translate(128,132)"><rect x="-11" y="-7" width="22" height="14" rx="4" fill="#E9A13B"/><rect x="-7" y="-11" width="14" height="8" rx="3" fill="#E9A13B"/></g>
+            </svg>
+          </div>
+          <div class="bottom-sheet">
+            <div class="bs-row">
+              <div>
+                <div class="bs-sub">OLEK GO · 4 MIN AWAY</div>
+                <div class="bs-fare">₦2,450</div>
+                <div class="bs-sub">Lekki Phase 1 → Victoria Island · 6.4 km</div>
+              </div>
+              <svg width="58" height="58" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="#0B4F3A"/><path d="M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34" fill="none" stroke="#E9A13B" stroke-width="9" stroke-linecap="round"/><circle cx="18" cy="74" r="6" fill="#F7F8F6"/><circle cx="81" cy="34" r="8.5" fill="#F7F8F6"/><circle cx="81" cy="34" r="3.2" fill="#0B4F3A"/></svg>
+            </div>
+            <div class="bs-cta">Confirm pickup · Admiralty Way</div>
+            <div class="driver-chip">
+              <div class="avatar">TO</div>
+              <div style="flex:1"><div style="font-size:.8rem;font-weight:800">Tunde O. <span style="color:var(--amber2)">★ 4.9</span></div><div style="font-size:.65rem;color:var(--gray)">White Toyota Corolla · LAG-482-KO</div></div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#157A54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 11.9a16 16 0 0 0 6 6l3.27-1.27a2 2 0 0 1 2.11.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS STRIP -->
+<div class="stats">
+  <div class="container stats-grid">
+    <div><div class="stat-n">US$450m</div><div class="stat-l">Nigerian e-hailing market, 2026</div></div>
+    <div><div class="stat-n">~45%</div><div class="stat-l">Of riders lost their Uber — looking for a home</div></div>
+    <div><div class="stat-n">15–18%</div><div class="stat-l">Capped driver commission. We mean capped.</div></div>
+    <div><div class="stat-n">24/7</div><div class="stat-l">Human safety desk — never a chatbot at 2am</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">What we drive</span>
+      <h2>Every journey Lagos can dream up</h2>
+      <p>From a bike across Yaba traffic to an SUV for the family — one app, honest fares, verified drivers.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17V8l2.5-4h7L18 8v9"/><circle cx="8" cy="17.5" r="1.6"/><circle cx="16" cy="17.5" r="1.6"/></svg></div><h3>Olek Go</h3><p>Everyday economy sedans — the dependable workhorse. From ₦800 base.</p><span class="svc-tag">MOST POPULAR</span></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M6 17V8l2.5-4h7L18 8v9"/><circle cx="8" cy="17.5" r="1.6"/><circle cx="16" cy="17.5" r="1.6"/><path d="M9 8h6"/></svg></div><h3>Olek Comfort</h3><p>Newer rides, higher spec, flight-tracked airport pickups. From ₦1,400.</p></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16V9a2 2 0 0 1 2-2h9l4 4h2a1 1 0 0 1 1 1v4"/><path d="M3 16h18"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg></div><h3>Olek XL</h3><p>SUVs &amp; vans — 6 to 8 seats for groups, luggage and big weekends. From ₦2,200.</p></div>
+            <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-9h4l2.5 6M10 8h5"/></svg></div><h3>Olek Bike</h3><p>Beat Third Mainland on two wheels. Certified helmets, verified riders. From ₦300.</p><span class="svc-tag">FASTEST</span></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div><h3>Olek Deliver</h3><p>Same-day parcels &amp; documents across Lagos — for you and your business. From ₦500.</p></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/><path d="M9.5 12l2 2 3.5-4"/></svg></div><h3>Olek Her</h3><p>Verified female drivers, priority matching and a discreet SOS phrase. On by default at night.</p><span class="svc-tag">SAFETY-FIRST</span></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div><h3>Olek Corporate</h3><p>Monthly invoicing, travel-policy controls and live dashboards for teams. Hotel &amp; airport contracts.</p></div>
+      <div class="svc"><div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B4F3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M6 14.5h5"/></svg></div><h3>Olek Pass</h3><p>Commuter subscription: fixed discounted fares on your daily route. Coming with Wave 2.</p></div>
+    </div>
+
+    <!-- FARE ESTIMATOR -->
+    <div class="estimator" aria-label="Fare estimator">
+      <div class="eyebrow" style="margin-bottom:.7rem">Instant fare estimate</div>
+      <div class="est-grid">
+        <div>
+          <label for="svc">Service</label>
+          <select id="svc">
+            <option value="go">Olek Go · sedan</option>
+            <option value="comfort">Olek Comfort · premium sedan</option>
+            <option value="xl">Olek XL · SUV / 6–8 seats</option>
+            <option value="bike">Olek Bike · motorcycle</option>
+          </select>
+        </div>
+        <div>
+          <label for="km">Distance — <span class="est-val" id="kmVal">6.4 km</span></label>
+          <input type="range" id="km" min="1" max="40" step="0.5" value="6.4">
+        </div>
+        <div>
+          <label for="mins">Time in traffic — <span class="est-val" id="minVal">14 min</span></label>
+          <input type="range" id="mins" min="2" max="90" step="1" value="14">
+        </div>
+      </div>
+      <div class="est-out" style="margin-top:1rem">
+        <div class="est-label" style="font-size:.7rem;letter-spacing:.1em;color:var(--gray);text-transform:uppercase;font-weight:800">Estimated fare</div>
+        <div class="est-fare" id="estFare">₦2,450</div>
+        <div class="est-note">Includes ₦120 booking fee · final fare may vary with traffic &amp; route · no surge above 1.5×, ever</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="safety" id="safety">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--amber)">Safety is the product</span>
+      <h2>Nobody gets in a car and hopes.<br>They know.</h2>
+      <p>Every Olek driver is verified before their first ride, every trip is trackable, and a human answers when you call. Not a bot. A person.</p>
+    </div>
+    <div class="safe-grid">
+      <div class="safe-card"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/><path d="M12 9v4M12 16h.01"/></svg><h3>One-tap SOS</h3><p>Connects you to the Olek Safety Desk and shares live GPS with your emergency contact — instantly, day or night.</p></div>
+      <div class="safe-card"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.4-3.6 4-5.4 7-5.4s5.6 1.8 7 5.4"/></svg><h3>Facial verification</h3><p>Drivers verify their face at log-in and at random mid-shift checks. Account sharing and impersonation simply don't fly.</p></div>
+      <div class="safe-card"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/><path d="M8.2 13.2l7.6 4.5M15.8 6.3L8.2 10.8"/></svg><h3>Live trip sharing</h3><p>Share your live location with anyone, one tap. Trips between 10pm–6am auto-share by default. You stay visible.</p></div>
+            <div class="safe-card"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E9A13B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.3-9A5.3 5.3 0 0 1 12 6.6 5.3 5.3 0 0 1 21.3 12C19 16.5 12 21 12 21z"/></svg><h3>Olek Her</h3><p>Verified female drivers, priority matching, pickup PIN and a discreet SOS phrase — calm, dignified, private.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DRIVERS -->
+<section id="drivers" style="background:#fff;border-top:1px solid var(--line)">
+  <div class="container earn-wrap">
+    <div>
+      <span class="eyebrow">Drive with Olek</span>
+      <h2 style="font-size:clamp(1.8rem,3.2vw,2.5rem);color:var(--green);margin:.6rem 0 1rem">Every naira<br>counts. We know.</h2>
+      <ul class="driver-points">
+        <li><span>→</span><span><b>Capped 15% commission</b> at launch — never a surprise 25%. Top performers pay 12–13%.</span></li>
+        <li><span>→</span><span><b>Weekly payouts, always</b> — Monday to every bank. Instant cash-out anytime for a transparent 1%.</span></li>
+        <li><span>→</span><span><b>Fuel &amp; maintenance relief</b> — ₦20/litre off with partner stations; discounted servicing &amp; tyres.</span></li>
+        <li><span>→</span><span><b>Path to ownership</b> — 12 clean months unlocks lease-to-own priority on partner vehicles.</span></li>
+        <li><span>→</span><span><b>Friday driver town halls</b> &amp; a Driver Advisory Council — you shape the app, not just suffer it.</span></li>
+        <li><span>→</span><span><b>₦25,000 referral bonus</b> per activated driver. You were their first choice of workplace — you're welcome.</span></li>
+      </ul>
+    </div>
+    <div class="earn-card" aria-label="Driver earnings estimator">
+      <div class="earn-label">Your potential month</div>
+      <div class="earn-big" id="earnTotal">₦378,000</div>
+      <div class="earn-rows">
+        <div class="er"><span>Rides per day</span><span><b id="ridesVal">9</b></span></div>
+        <input type="range" id="rides" min="2" max="20" step="1" value="9" aria-label="Rides per day">
+        <div class="er"><span>Days on the road / week</span><span><b id="daysVal">5</b></span></div>
+        <input type="range" id="days" min="1" max="7" step="1" value="5" aria-label="Days per week">
+        <div class="er"><span>Avg fare per ride</span><span>₦3,500</span></div>
+        <div class="er"><span>Your commission (capped)</span><span>15%</span></div>
+      </div>
+      <div class="er" style="display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.3);padding-top:.6rem;font-size:.82rem;color:rgba(255,255,255,.85)"><span>≈ vs typical 22–25% elsewhere</span><span id="earnDelta" style="color:#E9A13B;font-weight:800">+₦84,000</span></div>
+      <a href="#waitlist" class="btn btn-amber" style="width:100%;justify-content:center;margin-top:.8rem">Pre-register as a driver</a>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST + DRIVER SIGNUP -->
+<section id="waitlist" style="padding-top:10px">
+  <div class="container">
+    <div class="sec-head" style="margin-bottom:1.4rem">
+      <span class="eyebrow">Early access</span>
+      <h2>Be first in line</h2>
+      <p>Riders get launch credits. Drivers get founding rates. Everyone gets the ride that shows up.</p>
+    </div>
+    <div class="forms-grid">
+      <form class="form-card" id="riderForm" novalidate>
+        <h3>Rider waitlist</h3>
+        <p>Join 40,000+ Nigerians already on the list. We'll text you the moment Olek launches in your area.</p>
+        <div class="f-row">
+          <div><label class="f" for="rName">First name</label><input type="text" id="rName" required placeholder="Ada"></div>
+          <div><label class="f" for="rPhone">Phone (WhatsApp)</label><input type="tel" id="rPhone" required placeholder="0803 000 0000"></div>
+        </div>
+        <label class="f" for="rCity" style="margin-top:.55rem">City</label>
+        <select id="rCity"><option>Lagos — Lekki / VI</option><option>Lagos — Ikeja / Mainland</option><option>Lagos — Ajah / Ikate</option><option>Lagos — Yaba / Surulere</option><option>Abuja</option><option>Port Harcourt</option><option>Ibadan</option><option>Other</option></select>
+        <button type="submit" class="btn btn-green" style="width:100%;justify-content:center;margin-top:.9rem">Join the rider waitlist</button>
+        <div class="success" id="riderSuccess">You're in! Watch your phone — Olek will find you. 🚗 (kidding, we never text and drive.)</div>
+        <p class="form-note">We use your number only to notify you about launch. No spam, no sharing — NDPA 2023 compliant. See our privacy policy.</p>
+      </form>
+
+      <form class="form-card" id="driverForm" novalidate>
+        <h3>Driver pre-registration</h3>
+        <p>Founding drivers lock in 15% commission for 12 months and a ₦25,000 referral bonus per driver you bring.</p>
+        <div class="f-row">
+          <div><label class="f" for="dName">Full name</label><input type="text" id="dName" required placeholder="Tunde Olaniyi"></div>
+          <div><label class="f" for="dPhone">Phone</label><input type="tel" id="dPhone" required placeholder="0701 000 0000"></div>
+        </div>
+        <div class="f-row">
+                    <div><label class="f" for="dVehicle">Vehicle</label><select id="dVehicle"><option>Sedan (Olek Go)</option><option>Premium sedan (Olek Comfort)</option><option>SUV / Van (Olek XL)</option><option>Motorcycle (Olek Bike)</option></select></div>
+          <div><label class="f" for="dPlate">Plate number</label><input type="text" id="dPlate" required placeholder="LAG-482-KO"></div>
+        </div>
+        <label class="f" style="margin-top:.55rem">Licence &amp; LASDRI status</label>
+        <select id="dLic"><option>I have a valid driver's licence and LASDRI card</option><option>I have a licence, LASDRI in progress</option><option>I have neither yet — tell me how</option></select>
+        <button type="submit" class="btn btn-amber" style="width:100%;justify-content:center;margin-top:.9rem">Pre-register as an Olek driver</button>
+        <div class="success" id="driverSuccess">Received! Our driver ops team will call within 48 hours to schedule inspection &amp; onboarding. Welcome to the fleet. 🇳🇬</div>
+        <p class="form-note">Pre-registration creates no obligation. Onboarding requires: valid licence, LASRRA card, LASDRI certificate, VIO roadworthiness, hackney permit &amp; insurance.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CORPORATE -->
+<section id="corporate" style="padding-top:10px">
+  <div class="container">
+    <div class="corp">
+      <div>
+        <span class="eyebrow">Olek Corporate</span>
+        <h3>Your team on the road, one invoice.</h3>
+        <p>Monthly invoicing, negotiated rates, travel-policy controls, live dashboards and priority XL/airport transfers. Trusted by facilities, hotels and banks across Lagos from day one.</p>
+      </div>
+      <a class="btn btn-green" href="mailto:corporate@olekdrive.ng?subject=Olek%20Corporate%20enquiry&body=Hello%20Olek%20team%2C%20we%27d%20like%20a%20demo%20for%20our%20team.">Book a corporate demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:20px;background:var(--sage);border-top:1px solid var(--line)">
+  <div class="container">
+    <div class="sec-head"><span class="eyebrow">Questions</span><h2>Before you ask</h2></div>
+    <div class="faq-wrap">
+      <details open><summary>When does Olek Drive launch?</summary><div class="faq-body">Closed beta in Ikeja, Lekki, VI, Yaba and Ajah begins February 2027, with public Lagos launch in March 2027. Abuja, Port Harcourt and Ibadan follow in 2027; Accra and Abidjan in 2028; Dar es Salaam and Kampala in 2029.</div></details>
+      <details><summary>Can I pay cash?</summary><div class="faq-body">Yes. Cash, card, bank transfer, Olek Wallet, Apple Pay, Google Pay and USSD — pay however works for you. Drivers receive weekly bank payouts regardless of how you paid.</div></details>
+      <details><summary>How is Olek different from Bolt?</summary><div class="faq-body">Capped commissions for drivers (they earn more, they stay), a 24/7 human safety desk, no surge above 1.5×, cash-native payments, works on entry-level Androids and 3G, and a Nigerian company you can actually call. Simple.</div></details>
+      <details><summary>How much does Olek Bike cost?</summary><div class="faq-body">From ₦300 base and ₦120/km — usually 40–60% of a car fare for the same trip. Certified helmet for you and the rider, every ride, every time.</div></details>
+      <details><summary>How do drivers join?</summary><div class="faq-body">Pre-register above. We'll verify your identity (NIN), licence (FRSC), LASRRA card, LASDRI certificate, vehicle (VIO + hackney permit) and insurance — then you're on the road within days, not weeks.</div></details>
+      <details><summary>What about my data?</summary><div class="faq-body">Minimum necessary collection, 90-day location purge, encrypted opt-in audio, and government requests honoured only via lawful process. NDPA 2023 registered. Your data is not our business model — rides are.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <svg width="44" height="44" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" rx="20" fill="#E9A13B"/><path d="M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34" fill="none" stroke="#0B4F3A" stroke-width="9" stroke-linecap="round"/><circle cx="18" cy="74" r="6" fill="#0B4F3A"/><circle cx="81" cy="34" r="8.5" fill="#0B4F3A"/></svg>
+        <div style="font-family:'Arial Black',sans-serif;color:#fff;margin:.5rem 0 .3rem;letter-spacing:.05em">OLEK <span style="color:var(--amber)">DRIVE</span></div>
+        <p style="font-size:.78rem;color:rg
+              <div class="foot-bottom">
+      <span>© 2026 Olek Drive Ltd. All rights reserved. The Olek route mark is a trademark of Olek Drive Ltd.</span>
+      <span>Safety first · NDPA 2023 · hello@olekdrive.ng · +234 (0) 700 OLEK</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ---------- Fare estimator ----------
+const FARES = {
+  go:      {base:800,  perKm:250, perMin:35, fee:120, min:1200, cap:1.5, label:"Olek Go"},
+  comfort: {base:1400, perKm:350, perMin:50, fee:120, min:2000, cap:1.5, label:"Olek Comfort"},
+  xl:      {base:2200, perKm:480, perMin:70, fee:150, min:3000, cap:1.5, label:"Olek XL"},
+  bike:    {base:300,  perKm:120, perMin:15, fee:50,  min:500,  cap:1.5, label:"Olek Bike"}
+};
+const svcEl=document.getElementById('svc'), kmEl=document.getElementById('km'), minEl=document.getElementById('mins');
+const kmVal=document.getElementById('kmVal'), minVal=document.getElementById('minVal'), estFare=document.getElementById('estFare');
+function calcFare(){
+  const f=FARES[svcEl.value], km=parseFloat(kmEl.value), mins=parseInt(minEl.value,10);
+  kmVal.textContent=km.toFixed(1)+' km'; minVal.textContent=mins+' min';
+  const raw=f.base + f.perKm*km + f.perMin*mins + f.fee;
+  const fare=Math.max(f.min, Math.round(raw/50)*50);
+  estFare.textContent='₦'+fare.toLocaleString('en-NG');
+}
+[svcEl,kmEl,minEl].forEach(el=>el.addEventListener('input',calcFare)); calcFare();
+
+// ---------- Driver earnings estimator ----------
+const ridesEl=document.getElementById('rides'), daysEl=document.getElementById('days');
+const ridesVal=document.getElementById('ridesVal'), daysVal=document.getElementById('daysVal');
+const earnTotal=document.getElementById('earnTotal'), earnDelta=document.getElementById('earnDelta');
+function calcEarn(){
+  const rides=parseInt(ridesEl.value,10), days=parseInt(daysEl.value,10);
+  ridesVal.textContent=rides; daysVal.textContent=days;
+  const gross=rides*days*4.33*3500;
+  const net=gross*0.85;                     // 15% commission
+  const altNet=gross*0.755;                 // ~24.5% elsewhere
+  earnTotal.textContent='₦'+Math.round(net).toLocaleString('en-NG');
+  earnDelta.textContent='+₦'+Math.round(net-altNet).toLocaleString('en-NG');
+}
+[ridesEl,daysEl].forEach(el=>el.addEventListener('input',calcEarn)); calcEarn();
+
+// ---------- Forms → Supabase (Option B) with /api fallback (Option A) ----------
+const OLEK_SB = window.OLEK_SUPABASE || {};
+const SB_READY = /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(OLEK_SB.url || '')
+  && (OLEK_SB.anonKey || '').length > 20 && !/YOUR_/.test((OLEK_SB.url || '') + (OLEK_SB.anonKey || ''));
+
+const toast=document.getElementById('toast');
+function showToast(msg, ok=true){ toast.textContent=msg; toast.style.background = ok ? 'var(--green)' : '#B91C1C'; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),4800); }
+
+async function postJSON(url, data){
+  const res = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+  let body = null; try { body = await res.json(); } catch(e){}
+  if(!res.ok){ throw new Error((body && body.detail) ? body.detail : 'Something went wrong ('+res.status+'). Try again.'); }
+  return body;
+}
+async function submitSignup(table, data){
+  if(SB_READY){
+    const res = await fetch(OLEK_SB.url + '/rest/v1/' + table, {
+      method: 'POST',
+      headers: { 'apikey': OLEK_SB.anonKey, 'Authorization': 'Bearer ' + OLEK_SB.anonKey,
+                 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify(data)
+    });
+    if(!res.ok){ const t=await res.text(); throw new Error('Save failed (' + res.status + '): ' + t.slice(0,140)); }
+    return { ok: true };
+  }
+  return postJSON('/api/' + table, data); // local/Option-A backend
+}
+function wireForm(id, successId, table, build, okMsg){
+  const form=document.getElementById(id);
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    const btn=form.querySelector('button[type=submit]'); const label=btn.textContent;
+    btn.disabled=true; btn.textContent='Sending…';
+    try{
+      await submitSignup(table, build());
+      document.getElementById(successId).style.display='block';
+      showToast(okMsg);
+      form.querySelectorAll('input[type=text],input[type=tel]').forEach(i=>i.value='');
+    }catch(err){
+      showToast(err.message || 'Network error — check your connection and retry.', false);
+    }finally{ btn.disabled=false; btn.textContent=label; }
+  });
+}
+wireForm('riderForm','riderSuccess','riders',
+  ()=>({name:document.getElementById('rName').value, phone:document.getElementById('rPhone').value, city:document.getElementById('rCity').value}),
+  'Welcome to the waitlist!');
+wireForm('driverForm','driverSuccess','drivers',
+  ()=>({name:document.getElementById('dName').value, phone:document.getElementById('dPhone').value,
+        vehicle:document.getElementById('dVehicle').value, plate:document.getElementById('dPlate').value,
+        licence:document.getElementById('dLic').value}),
+  'Pre-registration received!');
+</script>
+</body>
+</html>
