@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Olek Drive — Operations Dashboard</title>
+<script src="olek-config.js"></script>
+<style>
+:root{--green:#0B4F3A;--green2:#157A54;--green3:#0E3D2E;--amber:#E9A13B;--mist:#F7F8F6;--line:#D8E0DB;--gray:#6B7280;--sage:#EAF3EE;--mid:#1E2A26}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--mist);color:var(--mid)}
+.serif,h1,h2{font-family:Georgia,serif}
+nav{background:var(--green3);color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.nw{font-family:"Arial Black",sans-serif;letter-spacing:.05em;font-size:.95rem}.nw b{color:var(--amber)}
+.nw small{font-family:system-ui;font-weight:400;color:rgba(255,255,255,.55);font-size:.62rem;letter-spacing:.14em;display:block}
+.nav-right{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.mode-badge{font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;border:1px solid rgba(255,255,255,.35);color:var(--amber);border-radius:999px;padding:.15rem .6rem;font-weight:800}
+.btn{border:none;border-radius:10px;padding:.5rem 1rem;font-weight:700;font-size:.8rem;cursor:pointer}
+.btn-amber{background:var(--amber);color:var(--mid)} .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)} .btn-green{background:var(--green);color:#fff;width:100%}
+.wrap{max-width:1180px;margin:24px auto;padding:0 20px}
+.login-box{max-width:410px;margin:9vh auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:2rem;box-shadow:0 18px 50px rgba(11,79,58,.14);text-align:center}
+.login-box h1{font-size:1.35rem;color:var(--green);margin:.6rem 0 .15rem}
+.login-box p{font-size:.82rem;color:var(--gray);margin-bottom:1rem}
+.hint{font-size:.68rem;color:var(--gray);margin-top:.7rem;line-height:1.5}
+.hint code{background:var(--mist);padding:.1rem .35rem;border-radius:4px}
+input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radius:10px;font-size:.93rem;margin-bottom:.65rem;background:var(--mist)}
+.err{color:#B91C1C;font-size:.8rem;min-height:1.1em;margin-bottom:.3rem}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:.75rem;margin-bottom:1rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:.8rem .7rem;text-align:center}
+.card .n{font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:var(--green)}
+.card .l{font-size:.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1rem}
+.panel h2{font-size:.92rem;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.55rem}
+.panel h2 small{font-weight:400;font-size:.65rem;color:var(--gray);font-family:system-ui}
+table{width:100%;border-collapse:collapse;font-size:.76rem}
+th{text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:.4rem .5rem;border-bottom:2px solid var(--green)}
+td{padding:.4rem .5rem;border-bottom:1px solid var(--line)}
+tr:nth-child(even) td{background:var(--mist)}
+.pill{display:inline-block;background:var(--sage);color:var(--green);border-radius:999px;padding:.05rem .5rem;font-size:.66rem;font-weight:700}
+.bar-row{display:flex;align-items:center;gap:.55rem;margin:.28rem 0;font-size:.76rem}
+.bar-row .lbl{width:185px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{flex:1;height:13px;background:#EDF1EE;border-radius:7px;overflow:hidden}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:7px}
+.bar-val{width:30px;text-align:right;font-weight:700;color:var(--green)}
+.empty{color:var(--gray);font-size:.78rem;font-style:italic;padding:.5rem 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1fr}}
+@media(max-width:560px){.cards{grid-template-columns:repeat(2,1fr)}}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,14px);background:var(--green);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.82rem;opacity:0;pointer-events:none;transition:all .25s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginView">
+  <div class="login-box">
+    <svg width="62" height="62" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" rx="20" fill="#0B4F3A"/><path d="M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34" fill="none" stroke="#E9A13B" stroke-width="8.5" stroke-linecap="round"/><circle cx="18" cy="74" r="5" fill="#F7F8F6"/><circle cx="81" cy="34" r="7.5" fill="#F7F8F6"/><circle cx="81" cy="34" r="2.8" fill="#0B4F3A"/></svg>
+    <h1>Olek Drive Ops</h1>
+    <p>Signups &amp; operations — authorised personnel only.</p>
+    <div class="err" id="loginErr" role="alert"></div>
+    <input type="email" id="email" placeholder="admin email (you@olekdrive.ng)" autocomplete="username" aria-label="Admin email">
+    <input type="password" id="pwd" placeholder="Password" autocomplete="current-password" aria-label="Password">
+        <button class="btn btn-green" id="loginBtn">Sign in</button>
+    <p class="hint" id="modeHint"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashView" style="display:none">
+  <nav>
+    <div class="nw">OLEK <b>DRIVE</b><small>OPERATIONS DASHBOARD</small></div>
+    <div class="nav-right">
+      <span class="mode-badge" id="modeBadge">local</span>
+      <span id="lastRefresh" style="font-size:.66rem;color:rgba(255,255,255,.55)"></span>
+      <button class="btn btn-ghost" id="refreshBtn">↻ Refresh</button>
+      <button class="btn btn-amber" id="exportRid">⬇ Riders CSV</button>
+      <button class="btn btn-amber" id="exportDrv">⬇ Drivers CSV</button>
+      <button class="btn btn-ghost" id="logoutBtn">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="cards">
+      <div class="card"><div class="n" id="cRid">–</div><div class="l">Riders</div></div>
+      <div class="card"><div class="n" id="cDrv">–</div><div class="l">Drivers</div></div>
+      <div class="card"><div class="n" id="cRidToday">–</div><div class="l">Riders today</div></div>
+      <div class="card"><div class="n" id="cDrvToday">–</div><div class="l">Drivers today</div></div>
+      <div class="card"><div class="n" id="cRid7">–</div><div class="l">Riders · 7d</div></div>
+      <div class="card"><div class="n" id="cDrv7">–</div><div class="l">Drivers · 7d</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel"><h2>Riders by city <small>top 8</small></h2><div id="cityBars"></div></div>
+      <div class="panel"><h2>Driver vehicle mix</h2><div id="vehBars"></div></div>
+    </div>
+    <div class="panel">
+      <h2>Latest riders <small id="rc"></small></h2>
+      <div style="overflow-x:auto"><table id="riderTable"><thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Signed up</th></tr></thead><tbody></tbody></table></div>
+      <div class="empty" id="riderEmpty" style="display:none">No signups yet — share olekdrive.ng.</div>
+    </div>
+    <div class="panel">
+      <h2>Latest drivers <small id="dc"></small></h2>
+      <div style="overflow-x:auto"><table id="driverTable"><thead><tr><th>Name</th><th>Phone</th><th>Vehicle</th><th>Plate</th><th>Licence status</th><th>Received</th></tr></thead><tbody></tbody></table></div>
+      <div class="empty" id="driverEmpty" style="display:none">No drivers yet — run the ex-Uber recruitment drive.</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+// ---------- Mode detection: Supabase (Option B) vs same-origin /api (Option A / local) ----------
+const SB = window.OLEK_SUPABASE || {};
+const SB_READY = /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(SB.url || '') && (SB.anonKey || '').length > 20 && !/YOUR_/.test((SB.url || '') + (SB.anonKey || ''));
+const MODE = SB_READY ? 'supabase' : 'local';
+
+const TOKEN_KEY = MODE === 'supabase' ? 'olek_sb_session' : 'olek_admin_token';
+const $ = id => document.getElementById(id);
+const toast = $('toast');
+const showToast = m => { toast.textContent = m; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 4200); };
+const session = () => { try { return JSON.parse(sessionStorage.getItem(TOKEN_KEY) || 'null'); } catch { return null; } };
+const setSession = s => sessionStorage.setItem(TOKEN_KEY, JSON.stringify(s));
+const clearSession = () => sessionStorage.removeItem(TOKEN_KEY);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmtDate = iso => { if(!iso) return ''; const d = new Date(iso); return isNaN(d) ? esc(iso) : d.toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); };
+const dayStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+const sameDay = (iso, ref) => { const d = new Date(iso); return !isNaN(d) && dayStr(d) === dayStr(ref); };
+
+$('modeBadge').textContent = MODE === 'supabase' ? 'Supabase' : 'Local';
+$('email').style.display = MODE === 'supabase' ? 'block' : 'none';
+$('modeHint').innerHTML = MODE === 'supabase'
+  ? 'Signed in with your <b>Supabase Auth</b> account.<br>Create your admin user: Supabase dashboard → <b>Authentication → Users → Add user</b>.'
+  : 'Local mode (no Supabase keys in <code>olek-config.js</code> yet).<br>Password: <b>olek-admin-2026</b> — change via <code>OLEK_ADMIN_PASSWORD</code>.';
+
+function showLogin(){ $('loginView').style.display = 'block'; $('dashView').style.display = 'none'; }
+function showDash(){ $('loginView').style.display = 'none'; $('dashView').style.display = 'block'; }
+
+// ---------- Supabase REST helpers ----------
+async function sbFetch(path, opts = {}, useUserToken = true){
+  const s = session();
+  const headers = Object.assign({ 'apikey': SB.anonKey }, opts.headers || {});
+  if (useUserToken && s && s.access_token) headers['Authorization'] = 'Bearer ' + s.access_token;
+  else if (!headers['Authorization']) headers['Authorization'] = 'Bearer ' + SB.anonKey;
+  const res = await fetch(SB.url + path, Object.assign({}, opts, { headers }));
+  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired — sign in again.'); }
+  return res;
+}
+
+// ---------- Login ----------
+$('loginBtn').addEventListener('click', doLogin);
+$('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+$('email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  async function doLogin(){
+  $('loginErr').textContent = '';
+  const pwd = $('pwd').value;
+  if (pwd.length < 4) { $('loginErr').textContent = 'Enter your password.'; return; }
+  try {
+    if (MODE === 'supabase') {
+      const email = $('email').value.trim();
+      if (!/^\S+@\S+\.\S+$/.test(email)) { $('loginErr').textContent = 'Enter your admin email.'; return; }
+      const res = await fetch(SB.url + '/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: { 'apikey': SB.anonKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pwd })
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) { $('loginErr').textContent = body.error_description || body.msg || 'Sign-in failed — check email & password.'; return; }
+      setSession({ access_token: body.access_token, refresh_token: body.refresh_token, email });
+    } else {
+      const res = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) { $('loginErr').textContent = body.detail || 'Wrong password.'; return; }
+      setSession({ access_token: body.token });
+    }
+    $('pwd').value = ''; showDash(); refresh();
+  } catch (e) {
+    $('loginErr').textContent = 'Cannot reach the server — check your connection.';
+  }
+}
+$('logoutBtn').addEventListener('click', () => { clearSession(); showLogin(); });
+
+// ---------- Data loading ----------
+async function loadData(){
+  if (MODE === 'supabase') {
+    const [rr, dr] = await Promise.all([
+      sbFetch('/rest/v1/riders?select=name,phone,city,created_at&order=created_at.desc&limit=1000'),
+      sbFetch('/rest/v1/drivers?select=name,phone,vehicle,plate,licence,created_at&order=created_at.desc&limit=1000')
+    ]);
+    if (!rr.ok || !dr.ok) throw new Error('Could not load data (' + rr.status + '/' + dr.status + ').');
+    const riders = await rr.json(), drivers = await dr.json();
+    return computeStats(riders, drivers);
+  }
+  const s = session();
+  const res = await fetch('/api/admin/overview', { headers: { 'Authorization': 'Bearer ' + (s && s.access_token) } });
+  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired — sign in again.'); }
+  return res.json();
+}
+
+function computeStats(riders, drivers){
+  const now = new Date(); const weekAgo = new Date(now.getTime() - 7 * 864e5);
+  const countSince = (arr, since) => arr.filter(r => new Date(r.created_at) >= since).length;
+  const groupBy = (arr, key) => { const m = {}; arr.forEach(r => { const k = r[key] || 'Unknown'; m[k] = (m[k] || 0) + 1; }); return Object.entries(m).map(([k, n]) => ({ [key]: k, n })).sort((a,b) => b.n - a.n); };
+  return {
+    riders: riders.length, drivers: drivers.length,
+    riders_today: riders.filter(r => sameDay(r.created_at, now)).length,
+    drivers_today: drivers.filter(r => sameDay(r.created_at, now)).length,
+    riders_7d: countSince(riders, weekAgo), drivers_7d: countSince(drivers, weekAgo),
+    by_city: groupBy(riders, 'city').slice(0, 8), by_vehicle: groupBy(drivers, 'vehicle'),
+    recent_riders: riders.slice(0, 12), recent_drivers: drivers.slice(0, 12),
+    _raw: { riders, drivers }
+  };
+}
+
+function renderBars(el, data, key){
+  if (!data || !data.length) { el.innerHTML = '<div class="empty">No data yet.</div>'; return; }
+  const max = Math.max(...data.map(d => d.n));
+  el.innerHTML = data.map(d => `<div class="bar-row"><span class="lbl" title="${esc(d[key])}">${esc(d[key])}</span><div class="bar"><div style="width:${Math.round(d.n / max * 100)}%"></div></div><span class="bar-val">${d.n}</span></div>`).join('');
+}
+
+let lastData = null;
+async function refresh(){
+  try {
+    const d = await loadData(); lastData = d;
+    $('cRid').textContent = d.riders; $('cDrv').textContent = d.drivers;
+    $('cRidToday').textContent = d.riders_today; $('cDrvToday').textContent = d.drivers_today;
+    $('cRid7').textContent = d.riders_7d; $('cDrv7').textContent = d.drivers_7d;
+    renderBars($('cityBars'), d.by_city, 'city'); renderBars($('vehBars'), d.by_vehicle, 'vehicle');
+    const rt = $('riderTable').querySelector('tbody');
+    $('riderEmpty').style.display = d.recent_riders.length ? 'none' : 'block';
+    rt.innerHTML = d.recent_riders.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.city)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
+    const dt = $('driverTable').querySelector('tbody');
+    $('driverEmpty').style.display = d.recent_drivers.length ? 'none' : 'block';
+    dt.innerHTML = d.recent_drivers.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.vehicle)}</td><td><span class="pill">${esc(x.plate)}</span></td><td>${esc(x.licence)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
+    $('rc').textContent = 
+          const rows = lastData && lastData._raw ? lastData._raw[kind] : [];
+    if (!rows.length) { showToast('Nothing to export yet.'); return; }
+    const cols = kind === 'riders' ? ['name','phone','city','created_at'] : ['name','phone','vehicle','plate','licence','created_at'];
+    const blob = new Blob([toCSV(rows, cols)], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'olek_' + kind + '.csv'; a.click(); URL.revokeObjectURL(a.href);
+    showToast('Downloaded olek_' + kind + '.csv');
+  } else {
+    const s = session();
+    const res = await fetch('/api/admin/' + kind + '.csv', { headers: { 'Authorization': 'Bearer ' + (s && s.access_token) } });
+    const blob = await res.blob();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'olek_' + kind + '.csv'; a.click(); URL.revokeObjectURL(a.href);
+    showToast('Downloaded olek_' + kind + '.csv');
+  }
+}
+$('exportRid').addEventListener('click', () => download('riders'));
+$('exportDrv').addEventListener('click', () => download('drivers'));
+
+setInterval(() => { if (session()) refresh(); }, 20000);
+if (session()) { showDash(); refresh(); }
+</script>
+</body>
+</html>
