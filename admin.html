@@ -32,10 +32,27 @@ input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radi
 .card .n{font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:var(--green)}
 .card .l{font-size:.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem}
 .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1rem}
-.panel 
-  .empty{color:var(--gray);font-size:.78rem;font-style:italic;padding:.5rem 0}
+.panel h2{font-size:.92rem;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.55rem}
+.panel h2 small{font-weight:400;font-size:.65rem;color:var(--gray);font-family:system-ui}
+table{width:100%;border-collapse:collapse;font-size:.76rem}
+th{text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:.4rem .5rem;border-bottom:2px solid var(--green)}
+td{padding:.4rem .5rem;border-bottom:1px solid var(--line)}
+tr:nth-child(even) td{background:var(--mist)}
+.pill{display:inline-block;background:var(--sage);color:var(--green);border-radius:999px;padding:.05rem .5rem;font-size:.66rem;font-weight:700}
+.bar-row{display:flex;align-items:center;gap:.55rem;margin:.28rem 0;font-size:.76rem}
+.bar-row .lbl{width:185px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{flex:1;height:13px;background:#EDF1EE;border-radius:7px;overflow:hidden}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:7px}
+.bar-val{width:30px;text-align:right;font-weight:700;color:var(--green)}
+.empty{color:var(--gray);font-size:.78rem;font-style:italic;padding:.5rem 0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1fr}}
+.linkish{background:none;border:none;color:var(--green2);font-size:.8rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:.25rem}
+.switch{cursor:pointer;border:none;border-radius:8px;padding:.3rem .6rem;font-size:.68rem;font-weight:800}
+.switch.on{background:var(--sage);color:var(--green)}
+.switch.off{background:#FDE2E2;color:#B91C1C}
+#blockedView{display:none}
+.pill-admin{background:#E5ECF6;color:#1E4A7A}
+  @media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1fr}}
 @media(max-width:560px){.cards{grid-template-columns:repeat(2,1fr)}}
 #toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,14px);background:var(--green);color:#fff;padding:.6rem 1.1rem;border-radius:10px;font-size:.82rem;opacity:0;pointer-events:none;transition:all .25s}
 #toast.show{opacity:1;transform:translate(-50%,0)}
@@ -53,6 +70,7 @@ input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radi
     <input type="email" id="email" placeholder="admin email (you@olekdrive.ng)" autocomplete="username" aria-label="Admin email">
     <input type="password" id="pwd" placeholder="Password" autocomplete="current-password" aria-label="Password">
     <button class="btn btn-green" id="loginBtn">Sign in</button>
+    <div style="margin:.6rem 0 .1rem"><button class="linkish" id="magicBtn">Email me a sign-in link instead</button></div>
     <p class="hint" id="modeHint"></p>
   </div>
 </div>
@@ -63,27 +81,15 @@ input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radi
     <div class="nw">OLEK <b>DRIVE</b><small>OPERATIONS DASHBOARD</small></div>
     <div class="nav-right">
       <span class="mode-badge" id="modeBadge">local</span>
+      <span class="mode-badge" id="roleBadge" style="border-color:var(--amber);color:var(--amber)">Owner</span>
       <span id="lastRefresh" style="font-size:.66rem;color:rgba(255,255,255,.55)"></span>
       <button class="btn btn-ghost" id="refreshBtn">Refresh</button>
-      <button class="btn btn-amber" id="exportRid">Download Riders CSV</button>
-      <button class="btn btn-amber" id="exportDrv">Download Drivers CSV</button>
+      <button class="btn btn-amber owner-only" id="exportRid">Download Riders CSV</button>
+      <button class="btn btn-amber owner-only" id="exportDrv">Download Drivers CSV</button>
       <button class="btn btn-ghost" id="logoutBtn">Sign out</button>
     </div>
   </nav>
-
-  <div class="wrap">
-    <div class="cards">
-      <div class="card"><div class="n" id="cRid">-</div><div class="l">Riders</div></div>
-      <div class="card"><div class="n" id="cDrv">-</div><div class="l">Drivers</div></div>
-      <div class="card"><div class="n" id="cRidToday">-</div><div class="l">Riders today</div></div>
-      <div class="card"><div class="n" id="cDrvToday">-</div><div class="l">Drivers today</div></div>
-      <div class="card"><div class="n" id="cRid7">-</div><div class="l">Riders . 7d</div></div>
-      <div class="card"><div class="n" id="cDrv7">-</div><div class="l">Drivers . 7d</div></div>
-          </div>
-    <div class="grid-2">
-      <div class="panel"><h2>Riders by city <small>top 8</small></h2><div id="cityBars"></div></div>
-      <div class="panel"><h2>Driver vehicle mix</h2><div id="vehBars"></div></div>
-    </div>
+      </div>
     <div class="panel">
       <h2>Latest riders <small id="rc"></small></h2>
       <div style="overflow-x:auto"><table id="riderTable"><thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Signed up</th></tr></thead><tbody></tbody></table></div>
@@ -94,6 +100,30 @@ input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radi
       <div style="overflow-x:auto"><table id="driverTable"><thead><tr><th>Name</th><th>Phone</th><th>Vehicle</th><th>Plate</th><th>Licence status</th><th>Received</th></tr></thead><tbody></tbody></table></div>
       <div class="empty" id="driverEmpty" style="display:none">No drivers yet - run the ex-Uber recruitment drive.</div>
     </div>
+  </div>
+</div>
+
+<!-- BLOCKED -->
+<div id="blockedView">
+  <div class="login-box">
+    <h1>Access removed</h1>
+    <p style="color:var(--gray);font-size:.88rem;margin:.4rem 0 1rem">Your access to the Olek Drive operations dashboard is not active. Contact the Olek Drive owner (CEO).</p>
+    <button class="btn btn-green" id="blockedOutBtn">Sign out</button>
+  </div>
+</div>
+
+<!-- TEAM ACCESS (OWNER ONLY) -->
+<div class="owner-only">
+  <div class="panel" id="teamPanel" style="display:none;max-width:1180px;margin:0 auto 1rem;padding:1rem 1.1rem">
+    <h2>Team access <small>Owner only - deactivate instantly</small></h2>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+      <input id="newAdminName" placeholder="Name (Tunde Ops)" style="flex:2 1 150px;min-width:140px;margin-bottom:0">
+      <input id="newAdminEmail" placeholder="email address" style="flex:2 1 180px;min-width:170px;margin-bottom:0">
+      <select id="newAdminRole" aria-label="Role" style="flex:1 1 100px;min-width:90px"><option value="admin">Admin</option><option value="owner">Owner</option></select>
+      <button class="btn btn-green" id="addAdminBtn" style="width:auto">Add</button>
+    </div>
+    <div style="font-size:.68rem;color:var(--gray);margin-bottom:.4rem">They sign in with the link sent to their email. Deactivating blocks access immediately.</div>
+    <div style="overflow-x:auto"><table id="adminTable"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
   </div>
 </div>
 
@@ -111,26 +141,59 @@ const toast = $('toast');
 const showToast = m => { toast.textContent = m; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 4200); };
 const session = () => { try { return JSON.parse(sessionStorage.getItem(TOKEN_KEY) || 'null'); } catch { return null; } };
 const setSession = s => sessionStorage.setItem(TOKEN_KEY, JSON.stringify(s));
-const clearSession = () => sessionStorage.removeItem(TOKEN_KEY);
+  const clearSession = () => sessionStorage.removeItem(TOKEN_KEY);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate = iso => { if(!iso) return ''; const d = new Date(iso); return isNaN(d) ? esc(iso) : d.toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); };
 const dayStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 const sameDay = (iso, ref) => { const d = new Date(iso); return !isNaN(d) && dayStr(d) === dayStr(ref); };
 
+let MY_ROLE = 'owner';
+const isOwner = () => MY_ROLE === 'owner';
+const maskPhone = p => { const x = String(p ?? '').replace(/\s+/g, ''); return x.length < 6 ? '***' : x.slice(0, 4) + '****' + x.slice(-2); };
+
 $('modeBadge').textContent = MODE === 'supabase' ? 'Supabase' : 'Local';
+$('roleBadge').textContent = MODE === 'supabase' ? 'Checking role...' : 'Owner';
 $('email').style.display = MODE === 'supabase' ? 'block' : 'none';
 $('modeHint').innerHTML = MODE === 'supabase'
   ? 'Signed in with your <b>Supabase Auth</b> account.<br>Create your admin user: Supabase dashboard -> <b>Authentication -> Users -> Add user</b>.'
   : 'Local mode (no Supabase keys in <code>olek-config.js</code> yet).<br>Password: <b>olek-admin-2026</b> - change via <code>OLEK_ADMIN_PASSWORD</code>.';
 
-function showLogin(){ $('loginView').style.display = 'block'; $('dashView').style.display = 'none'; }
+function showLogin(){ $('loginView').style.display = 'block'; $('dashView').style.display = 'none'; $('blockedView').style.display = 'none'; }
+function showBlocked(msg){ $('loginView').style.display = 'none'; $('dashView').style.display = 'none'; $('blockedView').style.display = 'block'; if (msg) document.querySelector('#blockedView p').textContent = msg; }
+function applyRoleUI(){
+  const owner = isOwner();
+  document.querySelectorAll('.owner-only').forEach(el => { el.style.display = owner ? (el.id === 'teamPanel' ? 'block' : '') : 'none'; });
+  if (MODE === 'local') { $('roleBadge').textContent = 'Owner'; }
+  else { $('roleBadge').textContent = owner ? 'Owner - CEO' : 'Operations Admin'; }
+  $('roleBadge').style.borderColor = owner ? 'var(--amber)' : '#8FB4DD';
+  $('roleBadge').style.color = owner ? 'var(--amber)' : '#B7D4F2';
+}
+
+async function gateAndEnter(){
+  const s = session(); if (!s) { showLogin(); return; }
+  if (MODE !== 'supabase') { MY_ROLE = 'owner'; applyRoleUI(); showDash(); refresh(); return; }
+  try {
+    const email = (s.email || '').toLowerCase();
+    const rr = await sbFetch('/rest/v1/admins?select=email,name,role,active&email=eq.' + encodeURIComponent(email));
+    if (!rr.ok) throw new Error('role lookup failed (' + rr.status + ')');
+    const rows = await rr.json();
+    const me = rows[0];
+    if (!me || me.active === false) { clearSession(); showBlocked(); return; }
+    MY_ROLE = me.role === 'owner' ? 'owner' : 'admin';
+    applyRoleUI();
+    showDash();
+    refresh();
+    if (isOwner()) loadAdmins();
+  } catch (e) { $('loginErr').textContent = e.message || 'Could not verify access.'; showLogin(); }
+}
 function showDash(){ $('loginView').style.display = 'none'; $('dashView').style.display = 'block'; }
-  // ---------- Supabase REST helpers ----------
+
+// ---------- Supabase REST helpers ----------
 async function sbFetch(path, opts = {}, useUserToken = true){
   const s = session();
   const headers = Object.assign({ 'apikey': SB.anonKey }, opts.headers || {});
   if (useUserToken && s && s.access_token) headers['Authorization'] = 'Bearer ' + s.access_token;
-  else if (!headers['Authorization']) headers['Authorization'] = 'Bearer ' + SB.anonKey;
+    else if (!headers['Authorization']) headers['Authorization'] = 'Bearer ' + SB.anonKey;
   const res = await fetch(SB.url + path, Object.assign({}, opts, { headers }));
   if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired - sign in again.'); }
   return res;
@@ -163,13 +226,32 @@ async function doLogin(){
       if (!res.ok) { $('loginErr').textContent = body.detail || 'Wrong password.'; return; }
       setSession({ access_token: body.token });
     }
-    $('pwd').value = ''; showDash(); refresh();
+    $('pwd').value = ''; await gateAndEnter();
   } catch (e) {
     $('loginErr').textContent = 'Cannot reach the server - check your connection.';
   }
 }
 $('logoutBtn').addEventListener('click', () => { clearSession(); showLogin(); });
-  // ---------- Data loading ----------
+$('blockedOutBtn').addEventListener('click', () => { clearSession(); showLogin(); });
+
+$('magicBtn').addEventListener('click', async () => {
+  $('loginErr').textContent = '';
+  if (MODE !== 'supabase') { $('loginErr').textContent = 'Magic links need Supabase (local mode: use the password).'; return; }
+  const email = $('email').value.trim();
+  if (!/^\S+@\S+\.\S+$/.test(email)) { $('loginErr').textContent = 'Type your email first, then tap the link.'; return; }
+  try {
+    const res = await fetch(SB.url + '/auth/v1/otp', {
+      method: 'POST',
+      headers: { 'apikey': SB.anonKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, options: { email_redirect_to: location.origin + location.pathname } })
+    });
+        const body = await res.json().catch(() => ({}));
+    if (!res.ok) { $('loginErr').textContent = body.msg || body.error_description || 'Could not send the link - try again.'; return; }
+    showToast('Link sent to ' + email + ' - open it on this phone to sign in.');
+  } catch (e) { $('loginErr').textContent = 'Cannot reach the server - check your connection.'; }
+});
+
+// ---------- Data loading ----------
 async function loadData(){
   if (MODE === 'supabase') {
     const [rr, dr] = await Promise.all([
@@ -217,10 +299,10 @@ async function refresh(){
     renderBars($('cityBars'), d.by_city, 'city'); renderBars($('vehBars'), d.by_vehicle, 'vehicle');
         const rt = $('riderTable').querySelector('tbody');
     $('riderEmpty').style.display = d.recent_riders.length ? 'none' : 'block';
-    rt.innerHTML = d.recent_riders.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.city)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
+    rt.innerHTML = d.recent_riders.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(isOwner() ? x.phone : maskPhone(x.phone))}</td><td>${esc(x.city)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
     const dt = $('driverTable').querySelector('tbody');
     $('driverEmpty').style.display = d.recent_drivers.length ? 'none' : 'block';
-    dt.innerHTML = d.recent_drivers.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.vehicle)}</td><td><span class="pill">${esc(x.plate)}</span></td><td>${esc(x.licence)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
+    dt.innerHTML = d.recent_drivers.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(isOwner() ? x.phone : maskPhone(x.phone))}</td><td>${esc(x.vehicle)}</td><td><span class="pill">${esc(x.plate)}</span></td><td>${esc(x.licence)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
     $('rc').textContent = d.recent_riders.length + ' latest'; $('dc').textContent = d.recent_drivers.length + ' latest';
     $('lastRefresh').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB');
   } catch (e) { /* handled (401 -> login) */ }
@@ -233,6 +315,7 @@ function toCSV(rows, cols){
   return [cols.join(',')].concat(rows.map(r => cols.map(c => q(r[c])).join(','))).join('\r\n');
 }
 async function download(kind){
+  if (!isOwner()) { showToast('CSV export is owner-only.'); return; }
   if (MODE === 'supabase') {
     const rows = lastData && lastData._raw ? lastData._raw[kind] : [];
     if (!rows.length) { showToast('Nothing to export yet.'); return; }
@@ -251,8 +334,62 @@ async function download(kind){
 $('exportRid').addEventListener('click', () => download('riders'));
 $('exportDrv').addEventListener('click', () => download('drivers'));
 
+// ---------- Team access management (owner only) ----------
+async function loadAdmins(){
+  if (!isOwner()) return;
+  try {
+    const rr = await sbFetch('/rest/v1/admins?select=id,email,name,role,active&order=created_at.asc');
+    if (!rr.ok) throw new Error('Could not load team (' + rr.status + ')');
+    const rows = await rr.json();
+    const me = (session() && (session().email || '').toLowerCase()) || '';
+    $('adminTable').querySelector('tbody').innerHTML = rows.map(a => {
+      const you = a.email.toLowerCase() === me;
+      const btn = you
+        ? '<span style="font-size:.72rem;color:var(--gray)">you</span>'
+        : `<button class="switch ${a.active ? 'on' : 'off'}" data-id="${esc(a.id)}" data-active="${a.active ? 'false' : 'true'}">${a.active ? 'Active' : 'Deactivated'}</button>`;
+      const pill = a.role === 'owner' ? '<span class="pill">Owner</span>' : '<span class="pill pill-admin">Admin</span>';
+      return `<tr><td>${esc(a.name || '')}</td><td>${esc(a.email)}</td><td>${pill}</td><td>${a.active ? 'Can sign in' : 'Blocked'}</td><td>${btn}</td></tr>`;
+          }).join('');
+  } catch (e) { /* team panel is best-effort */ }
+}
+$('adminTable').addEventListener('click', async e => {
+  const btn = e.target.closest('.switch'); if (!btn) return;
+  const id = btn.getAttribute('data-id'), make = btn.getAttribute('data-active') === 'true';
+  const rr = await sbFetch('/rest/v1/admins?id=eq.' + encodeURIComponent(id), {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ active: make })
+  });
+  showToast(rr.ok ? (make ? 'Access restored.' : 'Access removed.') : 'Update failed.');
+  loadAdmins();
+});
+$('addAdminBtn').addEventListener('click', async () => {
+  const name = $('newAdminName').value.trim(), email = $('newAdminEmail').value.trim().toLowerCase(), role = $('newAdminRole').value;
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showToast('Enter a valid email.'); return; }
+  const rr = await sbFetch('/rest/v1/admins', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ email, name: name || null, role, active: true })
+  });
+  if (rr.ok) { $('newAdminName').value = ''; $('newAdminEmail').value = ''; showToast('Added ' + email); loadAdmins(); }
+  else { const t = await rr.text(); showToast('Could not add: ' + t.slice(0, 120)); }
+});
+
+// ---------- Magic-link landing: parse tokens from the URL hash ----------
+async function handleAuthHash(){
+  const params = new URLSearchParams(location.hash.slice(1));
+  const tok = params.get('access_token');
+  if (!tok) return false;
+  try {
+    const r = await fetch(SB.url + '/auth/v1/user', { headers: { 'apikey': SB.anonKey, 'Authorization': 'Bearer ' + tok } });
+    const u = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error('Sign-in link failed - request a fresh one.');
+    setSession({ access_token: tok, refresh_token: params.get('refresh_token') || null, email: (u.email || '').toLowerCase() });
+  } catch (e) { $('loginErr').textContent = e.message || 'Sign-in link failed.'; }
+  history.replaceState(null, '', location.pathname + location.search);
+  return true;
+}
+
 setInterval(() => { if (session()) refresh(); }, 20000);
-if (session()) { showDash(); refresh(); }
+(async () => { await handleAuthHash(); if (session()) gateAndEnter(); })();
 </script>
 </body>
 </html>
