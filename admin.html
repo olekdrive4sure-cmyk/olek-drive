@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light">
-<title>Olek Drive — Operations Dashboard</title>
+<title>Olek Drive - Operations Dashboard</title>
 <script src="olek-config.js"></script>
 <style>
 :root{--green:#0B4F3A;--green2:#157A54;--green3:#0E3D2E;--amber:#E9A13B;--mist:#F7F8F6;--line:#D8E0DB;--gray:#6B7280;--sage:#EAF3EE;--mid:#1E2A26}
@@ -32,19 +32,8 @@ input{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radi
 .card .n{font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:var(--green)}
 .card .l{font-size:.58rem;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem}
 .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem 1.1rem;margin-bottom:1rem}
-.panel h2{font-size:.92rem;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.55rem}
-.panel h2 small{font-weight:400;font-size:.65rem;color:var(--gray);font-family:system-ui}
-table{width:100%;border-collapse:collapse;font-size:.76rem}
-th{text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:.4rem .5rem;border-bottom:2px solid var(--green)}
-td{padding:.4rem .5rem;border-bottom:1px solid var(--line)}
-tr:nth-child(even) td{background:var(--mist)}
-.pill{display:inline-block;background:var(--sage);color:var(--green);border-radius:999px;padding:.05rem .5rem;font-size:.66rem;font-weight:700}
-.bar-row{display:flex;align-items:center;gap:.55rem;margin:.28rem 0;font-size:.76rem}
-.bar-row .lbl{width:185px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{flex:1;height:13px;background:#EDF1EE;border-radius:7px;overflow:hidden}
-.bar>div{height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:7px}
-.bar-val{width:30px;text-align:right;font-weight:700;color:var(--green)}
-.empty{color:var(--gray);font-size:.78rem;font-style:italic;padding:.5rem 0}
+.panel 
+  .empty{color:var(--gray);font-size:.78rem;font-style:italic;padding:.5rem 0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1fr}}
 @media(max-width:560px){.cards{grid-template-columns:repeat(2,1fr)}}
@@ -59,11 +48,11 @@ tr:nth-child(even) td{background:var(--mist)}
   <div class="login-box">
     <svg width="62" height="62" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" rx="20" fill="#0B4F3A"/><path d="M18 74 C18 42 30 18 58 17 C72 16 80 24 81 34" fill="none" stroke="#E9A13B" stroke-width="8.5" stroke-linecap="round"/><circle cx="18" cy="74" r="5" fill="#F7F8F6"/><circle cx="81" cy="34" r="7.5" fill="#F7F8F6"/><circle cx="81" cy="34" r="2.8" fill="#0B4F3A"/></svg>
     <h1>Olek Drive Ops</h1>
-    <p>Signups &amp; operations — authorised personnel only.</p>
+    <p>Signups &amp; operations - authorised personnel only.</p>
     <div class="err" id="loginErr" role="alert"></div>
     <input type="email" id="email" placeholder="admin email (you@olekdrive.ng)" autocomplete="username" aria-label="Admin email">
     <input type="password" id="pwd" placeholder="Password" autocomplete="current-password" aria-label="Password">
-        <button class="btn btn-green" id="loginBtn">Sign in</button>
+    <button class="btn btn-green" id="loginBtn">Sign in</button>
     <p class="hint" id="modeHint"></p>
   </div>
 </div>
@@ -75,22 +64,22 @@ tr:nth-child(even) td{background:var(--mist)}
     <div class="nav-right">
       <span class="mode-badge" id="modeBadge">local</span>
       <span id="lastRefresh" style="font-size:.66rem;color:rgba(255,255,255,.55)"></span>
-      <button class="btn btn-ghost" id="refreshBtn">↻ Refresh</button>
-      <button class="btn btn-amber" id="exportRid">⬇ Riders CSV</button>
-      <button class="btn btn-amber" id="exportDrv">⬇ Drivers CSV</button>
+      <button class="btn btn-ghost" id="refreshBtn">Refresh</button>
+      <button class="btn btn-amber" id="exportRid">Download Riders CSV</button>
+      <button class="btn btn-amber" id="exportDrv">Download Drivers CSV</button>
       <button class="btn btn-ghost" id="logoutBtn">Sign out</button>
     </div>
   </nav>
 
   <div class="wrap">
     <div class="cards">
-      <div class="card"><div class="n" id="cRid">–</div><div class="l">Riders</div></div>
-      <div class="card"><div class="n" id="cDrv">–</div><div class="l">Drivers</div></div>
-      <div class="card"><div class="n" id="cRidToday">–</div><div class="l">Riders today</div></div>
-      <div class="card"><div class="n" id="cDrvToday">–</div><div class="l">Drivers today</div></div>
-      <div class="card"><div class="n" id="cRid7">–</div><div class="l">Riders · 7d</div></div>
-      <div class="card"><div class="n" id="cDrv7">–</div><div class="l">Drivers · 7d</div></div>
-    </div>
+      <div class="card"><div class="n" id="cRid">-</div><div class="l">Riders</div></div>
+      <div class="card"><div class="n" id="cDrv">-</div><div class="l">Drivers</div></div>
+      <div class="card"><div class="n" id="cRidToday">-</div><div class="l">Riders today</div></div>
+      <div class="card"><div class="n" id="cDrvToday">-</div><div class="l">Drivers today</div></div>
+      <div class="card"><div class="n" id="cRid7">-</div><div class="l">Riders . 7d</div></div>
+      <div class="card"><div class="n" id="cDrv7">-</div><div class="l">Drivers . 7d</div></div>
+          </div>
     <div class="grid-2">
       <div class="panel"><h2>Riders by city <small>top 8</small></h2><div id="cityBars"></div></div>
       <div class="panel"><h2>Driver vehicle mix</h2><div id="vehBars"></div></div>
@@ -98,12 +87,12 @@ tr:nth-child(even) td{background:var(--mist)}
     <div class="panel">
       <h2>Latest riders <small id="rc"></small></h2>
       <div style="overflow-x:auto"><table id="riderTable"><thead><tr><th>Name</th><th>Phone</th><th>City</th><th>Signed up</th></tr></thead><tbody></tbody></table></div>
-      <div class="empty" id="riderEmpty" style="display:none">No signups yet — share olekdrive.ng.</div>
+      <div class="empty" id="riderEmpty" style="display:none">No signups yet - share olekdrive.ng.</div>
     </div>
     <div class="panel">
       <h2>Latest drivers <small id="dc"></small></h2>
       <div style="overflow-x:auto"><table id="driverTable"><thead><tr><th>Name</th><th>Phone</th><th>Vehicle</th><th>Plate</th><th>Licence status</th><th>Received</th></tr></thead><tbody></tbody></table></div>
-      <div class="empty" id="driverEmpty" style="display:none">No drivers yet — run the ex-Uber recruitment drive.</div>
+      <div class="empty" id="driverEmpty" style="display:none">No drivers yet - run the ex-Uber recruitment drive.</div>
     </div>
   </div>
 </div>
@@ -131,20 +120,19 @@ const sameDay = (iso, ref) => { const d = new Date(iso); return !isNaN(d) && day
 $('modeBadge').textContent = MODE === 'supabase' ? 'Supabase' : 'Local';
 $('email').style.display = MODE === 'supabase' ? 'block' : 'none';
 $('modeHint').innerHTML = MODE === 'supabase'
-  ? 'Signed in with your <b>Supabase Auth</b> account.<br>Create your admin user: Supabase dashboard → <b>Authentication → Users → Add user</b>.'
-  : 'Local mode (no Supabase keys in <code>olek-config.js</code> yet).<br>Password: <b>olek-admin-2026</b> — change via <code>OLEK_ADMIN_PASSWORD</code>.';
+  ? 'Signed in with your <b>Supabase Auth</b> account.<br>Create your admin user: Supabase dashboard -> <b>Authentication -> Users -> Add user</b>.'
+  : 'Local mode (no Supabase keys in <code>olek-config.js</code> yet).<br>Password: <b>olek-admin-2026</b> - change via <code>OLEK_ADMIN_PASSWORD</code>.';
 
 function showLogin(){ $('loginView').style.display = 'block'; $('dashView').style.display = 'none'; }
 function showDash(){ $('loginView').style.display = 'none'; $('dashView').style.display = 'block'; }
-
-// ---------- Supabase REST helpers ----------
+  // ---------- Supabase REST helpers ----------
 async function sbFetch(path, opts = {}, useUserToken = true){
   const s = session();
   const headers = Object.assign({ 'apikey': SB.anonKey }, opts.headers || {});
   if (useUserToken && s && s.access_token) headers['Authorization'] = 'Bearer ' + s.access_token;
   else if (!headers['Authorization']) headers['Authorization'] = 'Bearer ' + SB.anonKey;
   const res = await fetch(SB.url + path, Object.assign({}, opts, { headers }));
-  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired — sign in again.'); }
+  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired - sign in again.'); }
   return res;
 }
 
@@ -152,7 +140,8 @@ async function sbFetch(path, opts = {}, useUserToken = true){
 $('loginBtn').addEventListener('click', doLogin);
 $('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 $('email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  async function doLogin(){
+
+async function doLogin(){
   $('loginErr').textContent = '';
   const pwd = $('pwd').value;
   if (pwd.length < 4) { $('loginErr').textContent = 'Enter your password.'; return; }
@@ -166,7 +155,7 @@ $('email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); 
         body: JSON.stringify({ email, password: pwd })
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) { $('loginErr').textContent = body.error_description || body.msg || 'Sign-in failed — check email & password.'; return; }
+      if (!res.ok) { $('loginErr').textContent = body.error_description || body.msg || 'Sign-in failed - check email & password.'; return; }
       setSession({ access_token: body.access_token, refresh_token: body.refresh_token, email });
     } else {
       const res = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
@@ -176,12 +165,11 @@ $('email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); 
     }
     $('pwd').value = ''; showDash(); refresh();
   } catch (e) {
-    $('loginErr').textContent = 'Cannot reach the server — check your connection.';
+    $('loginErr').textContent = 'Cannot reach the server - check your connection.';
   }
 }
 $('logoutBtn').addEventListener('click', () => { clearSession(); showLogin(); });
-
-// ---------- Data loading ----------
+  // ---------- Data loading ----------
 async function loadData(){
   if (MODE === 'supabase') {
     const [rr, dr] = await Promise.all([
@@ -194,7 +182,7 @@ async function loadData(){
   }
   const s = session();
   const res = await fetch('/api/admin/overview', { headers: { 'Authorization': 'Bearer ' + (s && s.access_token) } });
-  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired — sign in again.'); }
+  if (res.status === 401) { clearSession(); showLogin(); throw new Error('Session expired - sign in again.'); }
   return res.json();
 }
 
@@ -227,14 +215,26 @@ async function refresh(){
     $('cRidToday').textContent = d.riders_today; $('cDrvToday').textContent = d.drivers_today;
     $('cRid7').textContent = d.riders_7d; $('cDrv7').textContent = d.drivers_7d;
     renderBars($('cityBars'), d.by_city, 'city'); renderBars($('vehBars'), d.by_vehicle, 'vehicle');
-    const rt = $('riderTable').querySelector('tbody');
+        const rt = $('riderTable').querySelector('tbody');
     $('riderEmpty').style.display = d.recent_riders.length ? 'none' : 'block';
     rt.innerHTML = d.recent_riders.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.city)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
     const dt = $('driverTable').querySelector('tbody');
     $('driverEmpty').style.display = d.recent_drivers.length ? 'none' : 'block';
     dt.innerHTML = d.recent_drivers.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.vehicle)}</td><td><span class="pill">${esc(x.plate)}</span></td><td>${esc(x.licence)}</td><td>${fmtDate(x.created_at)}</td></tr>`).join('');
-    $('rc').textContent = 
-          const rows = lastData && lastData._raw ? lastData._raw[kind] : [];
+    $('rc').textContent = d.recent_riders.length + ' latest'; $('dc').textContent = d.recent_drivers.length + ' latest';
+    $('lastRefresh').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB');
+  } catch (e) { /* handled (401 -> login) */ }
+}
+$('refreshBtn').addEventListener('click', refresh);
+
+// ---------- CSV export ----------
+function toCSV(rows, cols){
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  return [cols.join(',')].concat(rows.map(r => cols.map(c => q(r[c])).join(','))).join('\r\n');
+}
+async function download(kind){
+  if (MODE === 'supabase') {
+    const rows = lastData && lastData._raw ? lastData._raw[kind] : [];
     if (!rows.length) { showToast('Nothing to export yet.'); return; }
     const cols = kind === 'riders' ? ['name','phone','city','created_at'] : ['name','phone','vehicle','plate','licence','created_at'];
     const blob = new Blob([toCSV(rows, cols)], { type: 'text/csv' });
